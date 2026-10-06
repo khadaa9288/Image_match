@@ -1,121 +1,161 @@
-
 {% extends "prediction/base.html" %}
 
-{% block title %}Match Result | ImageMatch AI{% endblock %}
+{% block title %}
+Matching Result - Image Match
+{% endblock %}
+
 
 {% block content %}
-<section class="container py-5">
-    <div class="text-center mb-4">
-        <span class="section-label">Analysis complete</span>
-        <h1 class="fw-bold mt-2">Your Matching Result</h1>
-        <p class="text-secondary">
-            Here is the result of your image comparison.
-        </p>
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <span class="badge bg-success-subtle text-success px-3 py-2">
+
+            <i class="bi bi-check-circle me-1"></i>
+
+            Match Complete
+
+        </span>
+
+        <h1 class="fw-bold mt-3">
+            Matching Result
+        </h1>
+
     </div>
 
-    {% if image_match %}
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="page-card p-4 p-md-5">
-                <div class="row g-4 align-items-center">
-                    <div class="col-md-6">
-                        <h5 class="fw-bold mb-3">
-                            <i class="bi bi-image text-success me-2"></i>
-                            Uploaded Image
-                        </h5>
 
-                        {% if image_match.uploaded_image %}
-                        <img src="{{ image_match.uploaded_image.url }}"
-                             alt="Uploaded fruit image"
-                             class="result-image">
+    <div class="row g-4 justify-content-center">
+
+
+        <!-- UPLOADED IMAGE -->
+
+        <div class="col-lg-5">
+
+            <div class="card shadow-custom h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-3">
+
+                        <i class="bi bi-image me-2 text-success"></i>
+
+                        Uploaded Image
+
+                    </h5>
+
+
+                    {% if image_match.uploaded_image %}
+
+                        <img
+                            src="{{ image_match.uploaded_image.url }}"
+                            class="img-fluid result-image w-100"
+                            alt="Uploaded fruit"
+                        >
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="col-lg-5">
+
+            <div class="card shadow-custom h-100">
+
+                <div class="card-body p-4 text-center">
+
+
+                    <div class="display-3 text-success mb-3">
+
+                        <i class="bi bi-trophy"></i>
+
+                    </div>
+
+
+                    <p class="text-muted mb-1">
+                        Best Matching Fruit
+                    </p>
+
+
+                    <h2 class="fw-bold text-success">
+
+                        {{ image_match.matched_fruit|default:"No match found" }}
+
+                    </h2>
+
+
+                    <hr>
+
+
+                    <p class="text-muted mb-1">
+                        Similarity Score
+                    </p>
+
+
+                    <div class="score-number">
+
+                        {% if image_match.similarity_score %}
+                            {{ image_match.similarity_score|floatformat:2 }}%
                         {% else %}
-                        <div class="alert alert-warning">
-                            The uploaded image is unavailable.
-                        </div>
+                            0%
                         {% endif %}
 
-                        <p class="small text-secondary mt-3 mb-0">
-                            Uploaded on {{ image_match.created_at|date:"d M Y, h:i A" }}
-                        </p>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="bg-light rounded-4 p-4">
-                            <span class="section-label">Closest match</span>
 
-                            <h2 class="fw-bold mt-3 mb-2">
-                                {% if image_match.matched_fruit %}
-                                    {{ image_match.matched_fruit }}
-                                {% else %}
-                                    No match available
-                                {% endif %}
-                            </h2>
+                    <div class="progress mt-3" style="height: 12px;">
 
-                            <p class="text-secondary">
-                                {% if image_match.matched_fruit %}
-                                This is the closest match returned by
-                                the configured comparison process.
-                                {% else %}
-                                No fruit match was saved for this image.
-                                {% endif %}
-                            </p>
+                        <div
+                            class="progress-bar bg-success"
+                            role="progressbar"
+                            style="width: {{ image_match.similarity_score }}%;"
+                        ></div>
 
-                            <hr>
-
-                            <p class="fw-semibold mb-2">
-                                <i class="bi bi-bullseye text-success me-2"></i>
-                                Similarity Score
-                            </p>
-
-                            {% if image_match.similarity_score != None %}
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-secondary">Calculated similarity</span>
-                                    <span class="fw-bold text-success">
-                                        {{ image_match.similarity_score|floatformat:2 }}%
-                                    </span>
-                                </div>
-
-                                <div class="progress" style="height:12px">
-                                    <div class="progress-bar bg-success"
-                                         role="progressbar"
-                                         style="width: {% if image_match.similarity_score > 100 %}100{% elif image_match.similarity_score < 0 %}0{% else %}{{ image_match.similarity_score }}{% endif %}%"
-                                         aria-valuenow="{{ image_match.similarity_score }}"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100">
-                                    </div>
-                                </div>
-                            {% else %}
-                                <p class="text-secondary mb-0">
-                                    Similarity score is not available.
-                                </p>
-                            {% endif %}
-                        </div>
-
-                        <div class="d-grid gap-2 mt-4">
-                            <a href="/"
-                               class="btn btn-success btn-lg rounded-pill">
-                                <i class="bi bi-arrow-repeat me-2"></i>
-                                Compare Another Image
-                            </a>
-
-                            <button type="button"
-                                    onclick="window.print()"
-                                    class="btn btn-outline-success rounded-pill">
-                                <i class="bi bi-printer me-2"></i>
-                                Print Result
-                            </button>
-                        </div>
                     </div>
+
+
+                    <div class="d-grid gap-2 mt-4">
+
+                        <a
+                            href="{% url 'upload_image' %}"
+                            class="btn btn-success"
+                        >
+
+                            <i class="bi bi-arrow-repeat me-2"></i>
+
+                            Try Another Image
+
+                        </a>
+
+
+                        <a
+                            href="{% url 'history' %}"
+                            class="btn btn-outline-dark"
+                        >
+
+                            <i class="bi bi-clock-history me-2"></i>
+
+                            View History
+
+                        </a>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
-    {% else %}
-    <div class="alert alert-warning text-center">
-        <h5>No result was provided.</h5>
-        <p>Please upload an image first.</p>
-        <a href="/" class="btn btn-success">Upload Image</a>
-    </div>
-    {% endif %}
-</section>
+
+</div>
+
 {% endblock %}

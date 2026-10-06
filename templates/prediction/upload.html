@@ -1,112 +1,185 @@
-
 {% extends "prediction/base.html" %}
 
-{% block title %}Upload Fruit Image | ImageMatch AI{% endblock %}
-
-{% block content %}
-<section class="container py-5">
-    <div class="text-center mb-4">
-        <span class="section-label">Image comparison</span>
-        <h1 class="fw-bold mt-2">Upload Your Fruit Image</h1>
-        <p class="text-secondary">
-            Upload a clear image to find the closest match in your dataset.
-        </p>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-lg-7">
-            <div class="page-card p-4 p-md-5">
-
-                {% if error %}
-                <div class="alert alert-danger" role="alert">
-                    <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
-                </div>
-                {% endif %}
-
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="upload-zone">
-                        <i class="bi bi-cloud-arrow-up text-success"
-                           style="font-size:3.5rem"></i>
-
-                        <h5 class="fw-bold mt-3">Choose an image</h5>
-                        <p class="text-secondary small">
-                            Supported formats: JPG, JPEG, PNG, WEBP
-                        </p>
-
-                        <input type="file"
-                               name="uploaded_image"
-                               id="id_uploaded_image"
-                               class="form-control mt-3"
-                               accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                               required>
-                    </div>
-
-                    <div id="previewContainer" class="d-none mt-4">
-                        <h6 class="fw-bold">Image preview</h6>
-                        <img id="imagePreview"
-                             class="result-image"
-                             alt="Selected fruit preview">
-                        <p id="fileName" class="small text-secondary mt-2"></p>
-                    </div>
-
-                    <div class="alert alert-light border small mt-4">
-                        <i class="bi bi-info-circle text-success me-2"></i>
-                        For better comparisons, use a clear image with the
-                        fruit visible and a background similar to your
-                        reference images.
-                    </div>
-
-                    <button type="submit"
-                            class="btn btn-success btn-lg w-100 rounded-pill">
-                        <i class="bi bi-search me-2"></i>Find Matching Fruit
-                    </button>
-
-                    <a href="{% url 'home' %}"
-                       class="btn btn-outline-secondary w-100 rounded-pill mt-2">
-                        Cancel
-                    </a>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+{% block title %}
+Image Match - Upload
 {% endblock %}
 
-{% block extra_js %}
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("id_uploaded_image");
-    const container = document.getElementById("previewContainer");
-    const preview = document.getElementById("imagePreview");
-    const fileName = document.getElementById("fileName");
 
-    input.addEventListener("change", function () {
-        const file = this.files[0];
+{% block content %}
 
-        if (!file) {
-            container.classList.add("d-none");
-            return;
-        }
+<div class="container py-5">
 
-        if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-            alert("Please select a JPG, PNG, or WEBP image.");
-            this.value = "";
-            container.classList.add("d-none");
-            return;
-        }
+    <div class="row justify-content-center">
 
-        const reader = new FileReader();
+        <div class="col-lg-8">
 
-        reader.onload = function (event) {
-            preview.src = event.target.result;
-            fileName.textContent = file.name;
-            container.classList.remove("d-none");
-        };
 
-        reader.readAsDataURL(file);
-    });
-});
-</script>
+            <div class="text-center mb-4">
+
+                <span class="badge bg-success-subtle text-success px-3 py-2">
+
+                    <i class="bi bi-stars me-1"></i>
+
+                    Image Matching
+
+                </span>
+
+                <h1 class="fw-bold mt-3">
+                    Upload Fruit Image
+                </h1>
+
+                <p class="text-muted">
+                    Upload an image to find the closest matching fruit.
+                </p>
+
+            </div>
+
+
+            <div class="card shadow-custom">
+
+                <div class="card-body p-4 p-md-5">
+
+
+                    <form
+                        method="post"
+                        enctype="multipart/form-data"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <div class="upload-area text-center">
+
+
+                            <div class="display-2 text-success mb-3">
+
+                                <i class="bi bi-cloud-arrow-up"></i>
+
+                            </div>
+
+
+                            <h4 class="fw-bold">
+                                Choose Your Fruit Image
+                            </h4>
+
+
+                            <p class="text-muted">
+                                JPG, JPEG or PNG images are recommended.
+                            </p>
+
+
+                            <input
+                                type="file"
+                                name="uploaded_image"
+                                id="uploaded_image"
+                                class="form-control mt-4"
+                                accept="image/*"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="d-grid mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                            >
+
+                                <i class="bi bi-search me-2"></i>
+
+                                Find Matching Fruit
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <div class="row mt-4 g-3">
+
+
+                <div class="col-md-4">
+
+                    <div class="card shadow-sm h-100">
+
+                        <div class="card-body text-center">
+
+                            <i class="bi bi-image text-success fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Upload
+                            </h6>
+
+                            <small class="text-muted">
+                                Select a fruit image
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="card shadow-sm h-100">
+
+                        <div class="card-body text-center">
+
+                            <i class="bi bi-search text-success fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Compare
+                            </h6>
+
+                            <small class="text-muted">
+                                Find the closest image
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="card shadow-sm h-100">
+
+                        <div class="card-body text-center">
+
+                            <i class="bi bi-percent text-success fs-2"></i>
+
+                            <h6 class="fw-bold mt-2">
+                                Score
+                            </h6>
+
+                            <small class="text-muted">
+                                View similarity percentage
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}

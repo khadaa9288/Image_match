@@ -1,7 +1,7 @@
 {% extends "prediction/base.html" %}
 
 {% block title %}
-User Login - Image Match
+Admin Login - Image Match
 {% endblock %}
 
 
@@ -22,18 +22,18 @@ User Login - Image Match
 
                         <div class="text-center mb-4">
 
-                            <div class="auth-icon bg-success-subtle text-success">
+                            <div class="auth-icon bg-warning-subtle text-warning">
 
-                                <i class="bi bi-person-circle"></i>
+                                <i class="bi bi-shield-lock"></i>
 
                             </div>
 
                             <h2 class="fw-bold mt-3">
-                                User Login
+                                Admin Login
                             </h2>
 
                             <p class="text-muted">
-                                Login to use Image Match
+                                Administrator access
                             </p>
 
                         </div>
@@ -47,20 +47,20 @@ User Login - Image Match
                             <div class="mb-3">
 
                                 <label class="form-label fw-semibold">
-                                    Username
+                                    Admin Username
                                 </label>
 
                                 <div class="input-group">
 
                                     <span class="input-group-text">
-                                        <i class="bi bi-person"></i>
+                                        <i class="bi bi-person-badge"></i>
                                     </span>
 
                                     <input
                                         type="text"
                                         name="username"
                                         class="form-control"
-                                        placeholder="Enter username"
+                                        placeholder="Enter admin username"
                                         required
                                     >
 
@@ -72,20 +72,20 @@ User Login - Image Match
                             <div class="mb-4">
 
                                 <label class="form-label fw-semibold">
-                                    Password
+                                    Admin Password
                                 </label>
 
                                 <div class="input-group">
 
                                     <span class="input-group-text">
-                                        <i class="bi bi-lock"></i>
+                                        <i class="bi bi-lock-fill"></i>
                                     </span>
 
                                     <input
                                         type="password"
                                         name="password"
                                         class="form-control"
-                                        placeholder="Enter password"
+                                        placeholder="Enter admin password"
                                         required
                                     >
 
@@ -96,12 +96,12 @@ User Login - Image Match
 
                             <button
                                 type="submit"
-                                class="btn btn-success w-100 btn-lg"
+                                class="btn btn-dark btn-lg w-100"
                             >
 
                                 <i class="bi bi-box-arrow-in-right me-2"></i>
 
-                                Login
+                                Admin Login
 
                             </button>
 
@@ -110,41 +110,30 @@ User Login - Image Match
 
                         <div class="text-center mt-4">
 
-                            <p class="text-muted mb-2">
-                                Don't have an account?
-                            </p>
-
                             <a
-                                href="{% url 'register' %}"
-                                class="btn btn-outline-success"
+                                href="{% url 'login' %}"
+                                class="btn btn-outline-dark"
                             >
 
-                                <i class="bi bi-person-plus me-1"></i>
+                                <i class="bi bi-person me-1"></i>
 
-                                Create Account
+                                User Login
 
                             </a>
 
                         </div>
 
 
-                        <hr class="my-4">
-
-
-                        <div class="text-center">
-
-                            <p class="small text-muted">
-                                Administrator?
-                            </p>
+                        <div class="text-center mt-3">
 
                             <a
-                                href="{% url 'admin_login' %}"
-                                class="btn btn-warning"
+                                href="{% url 'home' %}"
+                                class="text-decoration-none text-muted"
                             >
 
-                                <i class="bi bi-shield-lock me-1"></i>
+                                <i class="bi bi-arrow-left me-1"></i>
 
-                                Admin Login
+                                Back to Home
 
                             </a>
 
@@ -162,4 +151,4 @@ User Login - Image Match
 
 </div>
 
-{% endblock %}
+{% endblock %}s

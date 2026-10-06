@@ -1,15 +1,43 @@
-
 from django.urls import path
+
 from . import views
 
+
 urlpatterns = [
-    path("", views.home, name="home"),
-    path("upload/", views.upload_image, name="upload_image"),
+
+    # ============================================================
+    # HOME
+    # ============================================================
+    path(
+        "",
+        views.home,
+        name="home"
+    ),
+
+    # ============================================================
+    # IMAGE MATCHING
+    # ============================================================
+    path(
+        "upload/",
+        views.upload_image,
+        name="upload_image"
+    ),
+
+    # ============================================================
+    # MATCHING RESULT
+    # ============================================================
     path(
         "success/<int:pk>/",
         views.upload_success,
-        name="upload_success",
+        name="upload_success"
     ),
-    path("history/", views.history, name="history"),
-    path("login/", views.user_login, name="login"),
+
+    # ============================================================
+    # USER MATCHING HISTORY
+    # ============================================================
+    path(
+        "history/",
+        views.history,
+        name="history"
+    ),
 ]
