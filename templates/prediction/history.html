@@ -1,0 +1,98 @@
+
+{% extends "prediction/base.html" %}
+
+{% block title %}Image History | ImageMatch AI{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="d-flex flex-column flex-md-row justify-content-between
+                align-items-md-center gap-3 mb-4">
+        <div>
+            <span class="section-label">Previous comparisons</span>
+            <h1 class="fw-bold mt-2">Image Match History</h1>
+            <p class="text-secondary mb-0">
+                Browse your saved fruit matching results.
+            </p>
+        </div>
+
+        <a href="{% url 'upload_image' %}"
+           class="btn btn-success rounded-pill px-4">
+            <i class="bi bi-plus-lg me-2"></i>New Comparison
+        </a>
+    </div>
+
+    <div class="page-card p-3 p-md-4">
+        {% if matches %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Uploaded Image</th>
+                        <th>Matched Fruit</th>
+                        <th>Similarity</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in matches %}
+                    <tr>
+                        <td>
+                            {% if item.uploaded_image %}
+                            <img src="{{ item.uploaded_image.url }}"
+                                 alt="Uploaded fruit"
+                                 width="65" height="65"
+                                 class="rounded-3"
+                                 style="object-fit:cover">
+                            {% else %}
+                            <span class="text-secondary">Unavailable</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="fw-semibold">
+                            {{ item.matched_fruit|default:"Unknown" }}
+                        </td>
+
+                        <td>
+                            {% if item.similarity_score != None %}
+                            <span class="badge text-bg-success">
+                                {{ item.similarity_score|floatformat:2 }}%
+                            </span>
+                            {% else %}
+                            <span class="text-secondary">Unavailable</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-secondary">
+                            {{ item.created_at|date:"d M Y, h:i A" }}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'upload_success' item.pk %}"
+                               class="btn btn-sm btn-outline-success rounded-pill">
+                                View Result
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-images text-success" style="font-size:3rem"></i>
+            <h5 class="fw-bold mt-3">No comparisons yet</h5>
+            <p class="text-secondary">
+                Upload your first fruit image to get started.
+            </p>
+            <a href="{% url 'upload_image' %}"
+               class="btn btn-success rounded-pill px-4">
+                Upload Image
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,121 @@
+
+{% extends "prediction/base.html" %}
+
+{% block title %}Match Result | ImageMatch AI{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="text-center mb-4">
+        <span class="section-label">Analysis complete</span>
+        <h1 class="fw-bold mt-2">Your Matching Result</h1>
+        <p class="text-secondary">
+            Here is the result of your image comparison.
+        </p>
+    </div>
+
+    {% if image_match %}
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="page-card p-4 p-md-5">
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">
+                            <i class="bi bi-image text-success me-2"></i>
+                            Uploaded Image
+                        </h5>
+
+                        {% if image_match.uploaded_image %}
+                        <img src="{{ image_match.uploaded_image.url }}"
+                             alt="Uploaded fruit image"
+                             class="result-image">
+                        {% else %}
+                        <div class="alert alert-warning">
+                            The uploaded image is unavailable.
+                        </div>
+                        {% endif %}
+
+                        <p class="small text-secondary mt-3 mb-0">
+                            Uploaded on {{ image_match.created_at|date:"d M Y, h:i A" }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-4 p-4">
+                            <span class="section-label">Closest match</span>
+
+                            <h2 class="fw-bold mt-3 mb-2">
+                                {% if image_match.matched_fruit %}
+                                    {{ image_match.matched_fruit }}
+                                {% else %}
+                                    No match available
+                                {% endif %}
+                            </h2>
+
+                            <p class="text-secondary">
+                                {% if image_match.matched_fruit %}
+                                This is the closest match returned by
+                                the configured comparison process.
+                                {% else %}
+                                No fruit match was saved for this image.
+                                {% endif %}
+                            </p>
+
+                            <hr>
+
+                            <p class="fw-semibold mb-2">
+                                <i class="bi bi-bullseye text-success me-2"></i>
+                                Similarity Score
+                            </p>
+
+                            {% if image_match.similarity_score != None %}
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-secondary">Calculated similarity</span>
+                                    <span class="fw-bold text-success">
+                                        {{ image_match.similarity_score|floatformat:2 }}%
+                                    </span>
+                                </div>
+
+                                <div class="progress" style="height:12px">
+                                    <div class="progress-bar bg-success"
+                                         role="progressbar"
+                                         style="width: {% if image_match.similarity_score > 100 %}100{% elif image_match.similarity_score < 0 %}0{% else %}{{ image_match.similarity_score }}{% endif %}%"
+                                         aria-valuenow="{{ image_match.similarity_score }}"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                    </div>
+                                </div>
+                            {% else %}
+                                <p class="text-secondary mb-0">
+                                    Similarity score is not available.
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="/"
+                               class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-arrow-repeat me-2"></i>
+                                Compare Another Image
+                            </a>
+
+                            <button type="button"
+                                    onclick="window.print()"
+                                    class="btn btn-outline-success rounded-pill">
+                                <i class="bi bi-printer me-2"></i>
+                                Print Result
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center">
+        <h5>No result was provided.</h5>
+        <p>Please upload an image first.</p>
+        <a href="/" class="btn btn-success">Upload Image</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

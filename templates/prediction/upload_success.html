@@ -1,0 +1,97 @@
+
+{% extends "prediction/base.html" %}
+
+{% block title %}Matching Result | ImageMatch AI{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="text-center mb-4">
+        <span class="section-label">Analysis complete</span>
+        <h1 class="fw-bold mt-2">Your Matching Result</h1>
+        <p class="text-secondary">
+            Review the closest match returned by the image comparison.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="page-card p-4 p-md-5">
+                <div class="row g-4 align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="fw-bold mb-3">Your uploaded image</h5>
+
+                        {% if image_match.uploaded_image %}
+                        <img src="{{ image_match.uploaded_image.url }}"
+                             class="result-image"
+                             alt="Uploaded fruit">
+                        {% endif %}
+
+                        <p class="text-secondary small mt-3">
+                            {{ image_match.created_at|date:"d M Y, h:i A" }}
+                        </p>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="bg-light rounded-4 p-4">
+                            <span class="section-label">Closest match</span>
+
+                            <h2 class="fw-bold mt-3">
+                                {{ image_match.matched_fruit|default:"Unknown" }}
+                            </h2>
+
+                            <p class="text-secondary">
+                                Best matching fruit found in your reference dataset.
+                            </p>
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">Similarity score</span>
+                                <span class="fs-3 fw-bold text-success">
+                                    {{ image_match.similarity_score|floatformat:2 }}%
+                                </span>
+                            </div>
+
+                            <div class="progress mt-3" style="height:12px">
+                                <div class="progress-bar bg-success"
+                                     role="progressbar"
+                                     style="width:{% if image_match.similarity_score > 100 %}100{% elif image_match.similarity_score < 0 %}0{% else %}{{ image_match.similarity_score }}{% endif %}%"
+                                     aria-valuenow="{{ image_match.similarity_score }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+
+                            <p class="text-secondary small mt-3 mb-0">
+                                This percentage is the algorithm's image
+                                similarity score, not a guaranteed probability
+                                that the fruit identification is correct.
+                            </p>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="{% url 'upload_image' %}"
+                               class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-arrow-repeat me-2"></i>
+                                Compare Another Image
+                            </a>
+
+                            <a href="{% url 'history' %}"
+                               class="btn btn-outline-success rounded-pill">
+                                <i class="bi bi-clock-history me-2"></i>
+                                View History
+                            </a>
+
+                            <button type="button"
+                                    onclick="window.print()"
+                                    class="btn btn-outline-secondary rounded-pill">
+                                <i class="bi bi-printer me-2"></i>Print Result
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
